@@ -934,32 +934,59 @@ const App = {
     const nextBtn = document.getElementById(`${prefix}-next`);
     const currentSpan = document.getElementById(`${prefix}-q-current`);
     const totalSpan = document.getElementById(`${prefix}-q-total`);
+    const resultEl = document.getElementById(`quiz-result-${prefix}`);
 
     if (totalSpan) totalSpan.textContent = quiz.questions.length;
 
-    function loadQuestion() {
-      if (currentQ >= quiz.questions.length) {
-        if (qContainer) {
-          const pct = Math.round((correctCount / quiz.questions.length) * 100);
-          qContainer.innerHTML = `
-            <div style="text-align: center; padding: 24px;">
-              <div style="font-size: 48px; margin-bottom: 12px;">${pct >= 70 ? '🎉' : '💪'}</div>
-              <h3 style="margin-bottom: 8px; color: var(--text-primary)">Quiz Complete!</h3>
-              <p style="font-size: 18px; font-weight: 700; color: var(--primary)">${correctCount}/${quiz.questions.length} correct (${pct}%)</p>
-              <p style="color: var(--text-secondary); margin: 12px 0; font-size: 14px;">${pct >= 70 ? 'Great job! You\'re ready to proceed.' : 'Review the material and try again.'}</p>
-              <button class="btn btn-primary" onclick="App.completeModule(${modNum})">${pct >= 70 ? '✓ Complete Module' : 'Retry Quiz'} ${pct >= 70 ? '' : ''}</button>
-              ${pct < 70 ? '<button class="btn btn-outline" style="margin-left: 8px;" onclick="App.setupQuiz(' + modNum + ')">Retry Quiz</button>' : ''}
+    function showQuizElements() {
+      document.querySelectorAll(`#quiz-${prefix} > .quiz-progress, #quiz-${prefix} > .quiz-question, #quiz-${prefix} > .quiz-options, #quiz-${prefix} > .quiz-feedback, #quiz-${prefix} > .quiz-next-btn`).forEach(el => {
+        if (el) el.style.display = '';
+      });
+      if (nextBtn) nextBtn.style.display = 'none';
+      if (resultEl) resultEl.style.display = 'none';
+    }
+
+    function showResult(passed, pct) {
+      document.querySelectorAll(`#quiz-${prefix} > .quiz-progress, #quiz-${prefix} > .quiz-question, #quiz-${prefix} > .quiz-options, #quiz-${prefix} > .quiz-feedback, #quiz-${prefix} > .quiz-next-btn`).forEach(el => {
+        if (el) el.style.display = 'none';
+      });
+      if (resultEl) {
+        const mod = document.getElementById(`page-module${modNum}`);
+        if (passed) {
+          resultEl.innerHTML = `
+            <div class="quiz-result-icon">🎉</div>
+            <h3>Congratulations!</h3>
+            <div class="quiz-result-score">${correctCount}/${quiz.questions.length} correct (${pct}%)</div>
+            <div class="quiz-result-message">Excellent work! You've passed the knowledge check. You're ready to proceed.</div>
+            <div class="quiz-result-actions">
+              <button class="btn btn-primary" onclick="App.completeModule(${modNum})">✓ Complete Module</button>
             </div>
           `;
-
-          if (pct >= 70 && !this.state.modules[modNum].quizCompleted) {
-            // completion handled by button click
-          }
+        } else {
+          resultEl.innerHTML = `
+            <div class="quiz-result-icon">📚</div>
+            <h3>Knowledge Check</h3>
+            <div class="quiz-result-score">${correctCount}/${quiz.questions.length} correct (${pct}%)</div>
+            <div class="quiz-result-message">You scored below the required 80% pass mark. Please review the module or retake the assessment before proceeding.</div>
+            <div class="quiz-result-actions">
+              <button class="btn btn-outline" onclick="App.scrollToModuleTop(${modNum})">📖 Review Module</button>
+              <button class="btn btn-primary" onclick="App.setupQuiz(${modNum})">🔄 Retry Quiz</button>
+            </div>
+          `;
         }
+        resultEl.style.display = 'block';
+      }
+    }
+
+    function loadQuestion() {
+      if (currentQ >= quiz.questions.length) {
+        const pct = Math.round((correctCount / quiz.questions.length) * 100);
+        showResult(pct >= 80, pct);
         return;
       }
 
       answered = false;
+      showQuizElements();
       const q = quiz.questions[currentQ];
       if (currentSpan) currentSpan.textContent = currentQ + 1;
       if (qEl) qEl.textContent = q.question;
@@ -1011,7 +1038,16 @@ const App = {
       };
     }
 
+    if (resultEl) resultEl.style.display = 'none';
+    showQuizElements();
     loadQuestion();
+  },
+
+  scrollToModuleTop(modNum) {
+    const modPage = document.getElementById(`page-module${modNum}`);
+    if (modPage) {
+      modPage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   },
 
   /* ============================================
@@ -1304,7 +1340,7 @@ const App = {
       <!DOCTYPE html>
       <html>
       <head>
-        <title>Smart Lending Academy - Certificate</title>
+        <title>Smart Lending Training Course - Certificate</title>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
         <style>
           * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1346,12 +1382,12 @@ const App = {
       <body>
         <div class="cert">
           <div class="badge">🏆</div>
-          <h1 class="title">SMART LENDING ACADEMY</h1>
+          <h1 class="title">Smart Lending Training Course</h1>
           <p class="subtitle">Building Healthy Loan Portfolios Through Better Merchant Selection and Relationship Management</p>
           <div class="divider"></div>
           <p class="label">This certifies that</p>
           <h2 class="name">${name}</h2>
-          <p class="desc">has successfully completed all modules of the Smart Lending Academy training program and demonstrated mastery in portfolio-based lending, merchant evaluation, and post-disbursement management.</p>
+          <p class="desc">has successfully completed all modules of the Smart Lending Training Course program and demonstrated mastery in portfolio-based lending, merchant evaluation, and post-disbursement management.</p>
           <div class="footer">
             <div>
               <span class="footer-label">Date Completed</span>
