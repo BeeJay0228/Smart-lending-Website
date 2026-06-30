@@ -1004,6 +1004,47 @@ input, textarea { font-family: inherit; outline: none; }
   line-height: 1.7;
 }
 
+/* Expand/Collapse Icon */
+.expand-icon {
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-tertiary);
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+.expand-icon::before {
+  content: '+';
+  font-size: 16px;
+  font-weight: 400;
+}
+.expanded .expand-icon::before {
+  content: '−';
+}
+*:hover > .expand-icon {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: rgba(26, 115, 232, 0.06);
+}
+
+/* SAFE card expand icon on colored header backgrounds */
+.safe-card .expand-icon {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.85);
+}
+.safe-card:hover .expand-icon {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #ffffff;
+}
+
 /* Discussion Cards */
 .discussion-cards {
   display: flex;
@@ -1028,8 +1069,9 @@ input, textarea { font-family: inherit; outline: none; }
   color: var(--text-primary);
   font-size: 15px;
   display: flex;
-  align-items: flex-start;
-  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .discussion-answer {
@@ -1363,12 +1405,32 @@ input, textarea { font-family: inherit; outline: none; }
 .safe-subtitle { font-size: 12px; opacity: 0.85; display: block; }
 
 .safe-expand-icon {
-  font-size: 22px;
-  font-weight: 300;
-  opacity: 0.8;
-  transition: transform 0.3s ease;
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.85);
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
-.safe-card.expanded .safe-expand-icon { transform: rotate(45deg); }
+.safe-expand-icon::before {
+  content: '+';
+  font-size: 16px;
+  font-weight: 400;
+}
+.safe-card.expanded .safe-expand-icon::before {
+  content: '−';
+}
+.safe-card:hover .safe-expand-icon {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #ffffff;
+}
 
 .safe-card-body {
   max-height: 0;
@@ -1604,6 +1666,10 @@ input, textarea { font-family: inherit; outline: none; }
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .timeline-body {
@@ -1657,7 +1723,6 @@ input, textarea { font-family: inherit; outline: none; }
 .traffic-light.red { background: var(--danger); box-shadow: 0 0 12px rgba(213,0,0,0.4); }
 
 .traffic-header h3 { flex: 1; font-size: 18px; font-weight: 700; color: var(--text-primary); }
-.traffic-expand-hint { font-size: 11px; color: var(--text-tertiary); }
 
 .traffic-body {
   max-height: 0;
