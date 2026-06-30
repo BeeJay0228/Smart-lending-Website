@@ -16,7 +16,7 @@ const App = {
       3: { status: 'locked', progress: 0, quizScore: 0, quizCompleted: false },
       4: { status: 'locked', progress: 0, quizScore: 0, quizCompleted: false },
     },
-    assessment: { completed: false, score: 0, passed: false },
+    assessment: { completed: false, score: 0, passed: false, date: '' },
     certificate: { generated: false, name: '', date: '', id: '' },
     scorecard: {
       stability: 0, need: 0, repay: 0, discipline: 0,
@@ -388,7 +388,7 @@ const App = {
         const data = JSON.parse(saved);
         this.state.darkMode = data.darkMode || false;
         this.state.timerSeconds = data.timerSeconds || 0;
-        this.state.assessment = data.assessment || { completed: false, score: 0, passed: false };
+        this.state.assessment = data.assessment || { completed: false, score: 0, passed: false, date: '' };
         this.state.certificate = data.certificate || { generated: false, name: '', date: '', id: '' };
         this.state.scorecard = data.scorecard || { stability: 0, need: 0, repay: 0, discipline: 0, character: 0, documentation: 0, guarantor: 0 };
         this.state.bookmarks = data.bookmarks || [];
@@ -478,6 +478,7 @@ const App = {
     if (page === 'module2') this.showModuleContent(2);
     if (page === 'module3') this.showModuleContent(3);
     if (page === 'module4') this.showModuleContent(4);
+    if (page === 'assessment') this.showAssessmentView();
 
     this.closeSidebar();
 
@@ -1123,6 +1124,67 @@ const App = {
   /* ============================================
      ASSESSMENT
      ============================================ */
+  showAssessmentView() {
+    const assessment = this.state.assessment;
+    const infoCard = document.querySelector('.assessment-info-card');
+    const quizEl = document.getElementById('assessment-quiz');
+    const resultEl = document.getElementById('assessment-result');
+
+    quizEl.style.display = 'none';
+    resultEl.style.display = 'none';
+
+    const existingSummary = document.querySelector('.assessment-summary-card');
+    if (existingSummary) existingSummary.remove();
+
+    if (assessment.completed) {
+      infoCard.style.display = 'none';
+      this.renderAssessmentSummary();
+    } else {
+      infoCard.style.display = 'block';
+    }
+  },
+
+  renderAssessmentSummary() {
+    const container = document.getElementById('assessment-container');
+    const assessment = this.state.assessment;
+    const total = this.assessmentQuestions.length;
+    const incorrect = total - assessment.score;
+    const pct = Math.round((assessment.score / total) * 100);
+    const passed = assessment.passed;
+
+    const card = document.createElement('div');
+    card.className = 'assessment-summary-card';
+    card.innerHTML = `
+      <div class="summary-icon">${passed ? '🏆' : '📚'}</div>
+      <h2>Congratulations!</h2>
+      <p class="summary-subtitle">You have successfully completed the Final Assessment.</p>
+      <div class="summary-score-wrap">
+        <span class="summary-score-value" style="color: ${passed ? 'var(--secondary)' : 'var(--danger)'}">${pct}%</span>
+        <span class="summary-score-label">Final Score</span>
+      </div>
+      <div class="summary-status ${passed ? 'pass' : 'fail'}">${passed ? 'Passed' : 'Not Passed'}</div>
+      <div class="summary-stats">
+        <div class="summary-stat">
+          <span class="summary-stat-value">${assessment.score}</span>
+          <span class="summary-stat-label">Correct</span>
+        </div>
+        <div class="summary-stat">
+          <span class="summary-stat-value">${incorrect}</span>
+          <span class="summary-stat-label">Incorrect</span>
+        </div>
+      </div>
+      ${assessment.date ? `<div class="summary-date">Completed on ${assessment.date}</div>` : ''}
+      <div class="summary-actions">
+        <button class="btn btn-primary" id="summary-cert-btn">View Certificate</button>
+        <button class="btn btn-outline" id="summary-retake-btn">Retake Assessment</button>
+      </div>
+    `;
+    container.appendChild(card);
+
+    document.getElementById('summary-cert-btn').addEventListener('click', () => this.navigateTo('certificate'));
+    document.getElementById('summary-retake-btn').addEventListener('click', () => this.retakeAssessment());
+  },
+
   setupAssessment() {
     document.getElementById('start-assessment-btn').addEventListener('click', () => this.startAssessment());
     document.getElementById('view-certificate-btn').addEventListener('click', () => this.navigateTo('certificate'));
@@ -1151,6 +1213,9 @@ const App = {
         App.state.assessment.completed = true;
         App.state.assessment.score = correctCount;
         App.state.assessment.passed = passed;
+        App.state.assessment.date = new Date().toLocaleDateString('en-US', {
+          year: 'numeric', month: 'long', day: 'numeric'
+        });
         App.saveState();
 
         document.getElementById('result-score').textContent = correctCount;
@@ -1245,6 +1310,8 @@ const App = {
 
     document.getElementById('assessment-result').style.display = 'none';
     document.querySelector('.assessment-info-card').style.display = 'block';
+    const summaryCard = document.querySelector('.assessment-summary-card');
+    if (summaryCard) summaryCard.remove();
     this.showToast('Assessment reset. Good luck!', 'info');
   },
 
