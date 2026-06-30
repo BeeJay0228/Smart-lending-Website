@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Lending Academy - PalmPay</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Sidebar Overlay for Mobile -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="logo-icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <rect width="28" height="28" rx="6" fill="url(#logo-gradient)"/>
+              <path d="M14 6L22 10V18L14 22L6 18V10L14 6Z" fill="white" fill-opacity="0.9"/>
+              <path d="M14 10L18 12V16L14 18L10 16V12L14 10Z" fill="white"/>
+              <defs>
+                <linearGradient id="logo-gradient" x1="0" y1="0" x2="28" y2="28">
+                  <stop offset="0%" stop-color="#1a73e8"/>
+                  <stop offset="100%" stop-color="#0d47a1"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="logo-text">
+            <span class="logo-title">Smart Lending</span>
+            <span class="logo-subtitle">Academy</span>
+          </div>
+        </div>
+        <button id="sidebar-close" class="sidebar-close-btn" aria-label="Close sidebar">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="sidebar-progress">
+        <div class="sidebar-progress-header">
+          <span class="sidebar-progress-label">Course Progress</span>
+          <span class="sidebar-progress-percent" id="sidebar-progress-pct">0%</span>
+        </div>
+        <div class="sidebar-progress-bar">
+          <div class="sidebar-progress-fill" id="sidebar-progress-fill" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav" id="sidebar-nav">
+        <a href="#" class="nav-item active" data-page="dashboard">
+          <span class="nav-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="11" y="2" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="2" y="11" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="11" y="11" width="7" height="7" rx="1.5" fill="currentColor"/></svg>
+          </span>
+          <span class="nav-text">Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" data-page="module1">
+          <span class="nav-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M10 6V10L13 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </span>
+          <span class="nav-text">Module 1: Mindset Shift</span>
+          <span class="nav-badge" id="badge-m1">New</span>
+        </a>
+        <a href="#" class="nav-item" data-page="module2">
+          <span class="nav-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M10 6V10L13 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </span>
+          <span class="nav-text">Module 2: Cause of Overdue</span>
+          <span class="nav-badge" id="badge-m2">New</span>
+        </a>
+        <a href="#" class="nav-item" data-page="module3">
+          <span class="nav-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M10 6V10L13 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </span>
+          <span class="nav-text">Module 3: Quality Merchants</span>
+          <span class="nav-badge" id="badge-m3">New</span>
+        </a>
+        <a href="#" class="nav-item" data-page="module4">
+          <span class="nav-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M10 6V10L13 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </span>
+          <span class="nav-text">Module 4: After Disbursement</span>
+          <span class="nav-badge" id="badge-m4">New</span>
+        </a>
+        <div class="nav-divider"></div>
+        <a href="#" class="nav-item" data-page="assessment">
+          <span class="nav-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 4H16V16H4V4Z" stroke="currentColor" stroke-width="1.5"/><path d="M7 10L9 12L13 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="nav-text">Final Assessment</span>
+          <span class="nav-badge" id="badge-assessment">Locked</span>
+        </a>
+        <a href="#" class="nav-item" data-page="certificate">
+          <span class="nav-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L12.5 7.5L18 8.5L14 12.5L15 18L10 15.5L5 18L6 12.5L2 8.5L7.5 7.5L10 2Z" stroke="currentColor" stroke-width="1.5"/></svg>
+          </span>
+          <span class="nav-text">Certificate</span>
+        </a>
+        <div class="nav-divider"></div>
+        <a href="#" class="nav-item" data-page="glossary">
+          <span class="nav-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 4H16V16H4V4Z" stroke="currentColor" stroke-width="1.5"/><path d="M7 7H13M7 10H11M7 13H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </span>
+          <span class="nav-text">Glossary</span>
+        </a>
+        <a href="#" class="nav-item" data-page="bookmarks">
+          <span class="nav-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 3H15V17L10 13.5L5 17V3Z" stroke="currentColor" stroke-width="1.5"/></svg>
+          </span>
+          <span class="nav-text">Bookmarks</span>
+          <span class="nav-badge" id="badge-bookmarks">0</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="dark-mode-toggle" class="sidebar-action-btn">
+          <svg class="sun-icon" width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <circle cx="9" cy="9" r="3.5" stroke="currentColor" stroke-width="1.5"/><path d="M9 1V3M9 15V17M1 9H3M15 9H17M3.5 3.5L5 5M13 13L14.5 14.5M14.5 3.5L13 5M5 13L3.5 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <svg class="moon-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" style="display:none">
+            <path d="M15 10.5C14.5 12.5 12.5 14 10 14C7 14 5 12 5 9C5 6.5 6.5 4.5 8.5 4C7 5.5 6.5 7.5 7 9.5C7.5 11.5 9 13 11 13.5C12 13.5 13 13 14 12C14.5 11.5 15 11 15 10.5Z" fill="currentColor"/>
+          </svg>
+          <span>Dark Mode</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main id="main-content" class="main-content">
+      <!-- Top Header Bar -->
+      <header class="top-header">
+        <div class="header-left">
+          <button id="sidebar-toggle" class="header-icon-btn" aria-label="Toggle menu">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 6H19M3 11H19M3 16H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+          <div class="header-search" id="header-search">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.5"/><path d="M12.5 12.5L16 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <input type="text" id="search-input" placeholder="Search training..." autocomplete="off">
+            <div id="search-results" class="search-results"></div>
+          </div>
+        </div>
+        <div class="header-right">
+          <button id="search-toggle" class="header-icon-btn mobile-only" aria-label="Search">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="6.5" stroke="currentColor" stroke-width="1.5"/><path d="M14.5 14.5L18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <button id="header-bookmark" class="header-icon-btn" aria-label="Bookmark current page">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 3H15V17L10 13.5L5 17V3Z" stroke="currentColor" stroke-width="1.5"/></svg>
+          </button>
+          <div class="header-timer">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 4.5V8L10.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <span id="timer-display">00:00:00</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Content Container -->
+      <div class="content-container" id="content-container">
+        <!-- Dashboard -->
+        <div class="page active" id="page-dashboard">
+          <div class="welcome-card">
+            <div class="welcome-content">
+              <div class="welcome-badge">Welcome to Smart Lending Academy</div>
+              <h1 class="welcome-title">Build Healthy Loan Portfolios</h1>
+              <p class="welcome-subtitle">Through Better Merchant Selection and Relationship Management</p>
+              <div class="welcome-actions">
+                <button class="btn btn-primary" id="continue-learning-btn">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M7 5.5V12.5L12.5 9L7 5.5Z" fill="currentColor"/></svg>
+                  Continue Learning
+                </button>
+                <button class="btn btn-outline" id="start-over-btn">Start Over</button>
+              </div>
+            </div>
+            <div class="welcome-illustration">
+              <div class="welcome-graphic">
+                <svg width="200" height="160" viewBox="0 0 200 160">
+                  <rect x="20" y="60" width="60" height="80" rx="6" fill="url(#bar1)"/>
+                  <rect x="90" y="30" width="60" height="110" rx="6" fill="url(#bar2)"/>
+                  <rect x="160" y="45" width="20" height="95" rx="6" fill="url(#bar3)"/>
+                  <line x1="15" y1="145" x2="185" y2="145" stroke="#1a73e8" stroke-width="1.5" stroke-dasharray="4" opacity="0.5"/>
+                  <text x="50" y="155" fill="#64748b" font-size="8" text-anchor="middle">₦5M</text>
+                  <text x="120" y="155" fill="#64748b" font-size="8" text-anchor="middle">₦10M</text>
+                  <text x="170" y="155" fill="#64748b" font-size="8" text-anchor="middle">₦3M</text>
+                  <defs>
+                    <linearGradient id="bar1" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#1a73e8"/><stop offset="100%" stop-color="#4fc3f7"/></linearGradient>
+                    <linearGradient id="bar2" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#0d47a1"/><stop offset="100%" stop-color="#1a73e8"/></linearGradient>
+                    <linearGradient id="bar3" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#00c853"/><stop offset="100%" stop-color="#69f0ae"/></linearGradient>
+                  </defs>
+                </svg>
+                <div class="floating-card card-1">📊 Portfolio Health: 82%</div>
+                <div class="floating-card card-2">✅ 4 Modules</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            <div class="stat-card" id="stat-progress">
+              <div class="stat-icon" style="background: linear-gradient(135deg, #1a73e8, #4fc3f7)">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L14 8L20 9L15.5 13.5L17 20L11 16.5L5 20L6.5 13.5L2 9L8 8L11 2Z" fill="white"/></svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-value" id="stat-progress-value">0%</span>
+                <span class="stat-label">Training Progress</span>
+              </div>
+            </div>
+            <div class="stat-card" id="stat-modules">
+              <div class="stat-icon" style="background: linear-gradient(135deg, #0d47a1, #1a73e8)">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="white"/><rect x="12" y="3" width="7" height="7" rx="1.5" fill="white"/><rect x="3" y="12" width="7" height="7" rx="1.5" fill="white"/><rect x="12" y="12" width="7" height="7" rx="1.5" fill="white"/></svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-value"><span id="stat-modules-completed">0</span>/4</span>
+                <span class="stat-label">Modules Completed</span>
+              </div>
+            </div>
+            <div class="stat-card" id="stat-health">
+              <div class="stat-icon" style="background: linear-gradient(135deg, #00c853, #69f0ae)">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M14 3H8V8H3V14H8V19H14V14H19V8H14V3Z" fill="white"/></svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-value" id="stat-health-value">--</span>
+                <span class="stat-label">Portfolio Health</span>
+              </div>
+            </div>
+            <div class="stat-card" id="stat-time">
+              <div class="stat-icon" style="background: linear-gradient(135deg, #ff6d00, #ffab00)">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="white" stroke-width="1.5"/><path d="M11 7V11L14 14" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-value" id="stat-time-value">0h 0m</span>
+                <span class="stat-label">Learning Time</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-section">
+            <h2 class="section-title">Training Modules</h2>
+            <div class="module-grid" id="module-grid">
+              <div class="module-card" data-module="1">
+                <div class="module-card-header" style="background: linear-gradient(135deg, #1a73e8, #0d47a1)">
+                  <span class="module-number">Module 01</span>
+                  <span class="module-status-badge" id="m1-status">Not Started</span>
+                </div>
+                <div class="module-card-body">
+                  <h3>The Big Mindset Shift</h3>
+                  <p>From Loan Sales Officer to Portfolio Builder</p>
+                  <div class="module-meta">
+                    <span>⏱ 20 min</span>
+                    <span>📝 5 questions</span>
+                  </div>
+                  <div class="module-progress-bar">
+                    <div class="module-progress-fill" id="m1-progress" style="width: 0%"></div>
+                  </div>
+                  <button class="btn btn-primary btn-sm start-module-btn" data-module="1">Start Module</button>
+                </div>
+              </div>
+              <div class="module-card" data-module="2">
+                <div class="module-card-header" style="background: linear-gradient(135deg, #00c853, #009624)">
+                  <span class="module-number">Module 02</span>
+                  <span class="module-status-badge" id="m2-status">Locked</span>
+                </div>
+                <div class="module-card-body">
+                  <h3>The Real Cause of Overdue Loans</h3>
+                  <p>Understanding root causes and prevention</p>
+                  <div class="module-meta">
+                    <span>⏱ 25 min</span>
+                    <span>📝 8 questions</span>
+                  </div>
+                  <div class="module-progress-bar">
+                    <div class="module-progress-fill" id="m2-progress" style="width: 0%"></div>
+                  </div>
+                  <button class="btn btn-primary btn-sm start-module-btn" data-module="2">Start Module</button>
+                </div>
+              </div>
+              <div class="module-card" data-module="3">
+                <div class="module-card-header" style="background: linear-gradient(135deg, #ff6d00, #e65100)">
+                  <span class="module-number">Module 03</span>
+                  <span class="module-status-badge" id="m3-status">Locked</span>
+                </div>
+                <div class="module-card-body">
+                  <h3>Identifying Quality Merchants</h3>
+                  <p>SAFE Framework & Scorecard</p>
+                  <div class="module-meta">
+                    <span>⏱ 35 min</span>
+                    <span>📝 10 questions</span>
+                  </div>
+                  <div class="module-progress-bar">
+                    <div class="module-progress-fill" id="m3-progress" style="width: 0%"></div>
+                  </div>
+                  <button class="btn btn-primary btn-sm start-module-btn" data-module="3">Start Module</button>
+                </div>
+              </div>
+              <div class="module-card" data-module="4">
+                <div class="module-card-header" style="background: linear-gradient(135deg, #d500f9, #aa00ff)">
+                  <span class="module-number">Module 04</span>
+                  <span class="module-status-badge" id="m4-status">Locked</span>
+                </div>
+                <div class="module-card-body">
+                  <h3>The Loan Has Been Disbursed... Now What?</h3>
+                  <p>90-Day Merchant Success Journey</p>
+                  <div class="module-meta">
+                    <span>⏱ 30 min</span>
+                    <span>📝 8 questions</span>
+                  </div>
+                  <div class="module-progress-bar">
+                    <div class="module-progress-fill" id="m4-progress" style="width: 0%"></div>
+                  </div>
+                  <button class="btn btn-primary btn-sm start-module-btn" data-module="4">Start Module</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-section">
+            <h2 class="section-title">Quick Access</h2>
+            <div class="quick-access-grid">
+              <button class="quick-access-card" data-page="assessment">
+                <span class="qa-icon">📋</span>
+                <span class="qa-title">Final Assessment</span>
+                <span class="qa-desc">Test your knowledge</span>
+              </button>
+              <button class="quick-access-card" data-page="certificate">
+                <span class="qa-icon">🏆</span>
+                <span class="qa-title">Certificate</span>
+                <span class="qa-desc">View your achievement</span>
+              </button>
+              <button class="quick-access-card" data-page="glossary">
+                <span class="qa-icon">📖</span>
+                <span class="qa-title">Glossary</span>
+                <span class="qa-desc">Key terms & definitions</span>
+              </button>
+              <button class="quick-access-card" data-page="bookmarks">
+                <span class="qa-icon">🔖</span>
+                <span class="qa-title">Bookmarks</span>
+                <span class="qa-desc">Your saved items</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Module 1 -->
+        <div class="page" id="page-module1">
+          <div class="module-header">
+            <div class="module-header-content">
+              <span class="module-tag">Module 1</span>
+              <h1>The Big Mindset Shift</h1>
+              <p>From Loan Sales Officer to Portfolio Builder</p>
+              <div class="module-header-meta">
+                <span>⏱ 20 minutes</span>
+                <span>📝 5 Knowledge Check Questions</span>
+              </div>
+            </div>
+          </div>
+          <div class="module-body" id="module1-body">
+            <div class="interactive-section" id="m1-intro">
+              <div class="mindset-container">
+                <div class="mindset-hero">
+                  <div class="mindset-icon">💭</div>
+                  <h2>Picture This...</h2>
+                  <div class="mindset-amount">₦5,000,000</div>
+                  <p>You have just disbursed a ₦5,000,000 loan to a merchant.</p>
+                  <div class="mindset-question">
+                    <strong>Have you successfully completed your job?</strong>
+                  </div>
+                  <div class="mindset-buttons">
+                    <button class="btn btn-primary mindset-btn" data-answer="yes">YES</button>
+                    <button class="btn btn-outline mindset-btn" data-answer="no">NOT YET</button>
+                  </div>
+                  <div class="mindset-reveal" id="mindset-reveal" style="display:none">
+                    <div class="reveal-content">
+                      <div class="reveal-icon">⚡</div>
+                      <h3>Here's the Truth</h3>
+                      <p class="reveal-text">Loan Disbursement ≠ Success</p>
+                      <p class="reveal-text highlight">Loan Repayment = Success</p>
+                      <div class="reveal-explanation">
+                        <p>Disbursing a loan is just the first step. Your job is only truly complete when the merchant has fully repaid. Until then, the work continues.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="interactive-section" id="m1-discussion" style="display:none">
+              <h2 class="section-title-center">Let's Think Deeper</h2>
+              <div class="discussion-cards">
+                <div class="discussion-card" onclick="this.classList.toggle('expanded')">
+                  <div class="discussion-question">🤔 When is your job truly complete as a Loan Sales Officer?</div>
+                  <div class="discussion-answer">Your job is complete only when the loan is fully repaid with all interest. Disbursement is the beginning, not the end. Every loan you sell becomes part of your portfolio, and the health of that portfolio reflects your judgement.</div>
+                </div>
+                <div class="discussion-card" onclick="this.classList.toggle('expanded')">
+                  <div class="discussion-question">🤔 If the merchant never repays, was it a successful sale?</div>
+                  <div class="discussion-answer">Absolutely not. A sale that results in a default is not a success—it's a liability. It hurts the business, wastes resources, and damages the merchant's credit. True success is measured by repayment, not disbursement.</div>
+                </div>
+                <div class="discussion-card" onclick="this.classList.toggle('expanded')">
+                  <div class="discussion-question">🤔 What does a portfolio with 70% defaults say about your judgement?</div>
+                  <div class="discussion-answer">A 70% default rate indicates poor merchant selection. It suggests that the Loan Sales Officer prioritized quantity over quality, failed to properly assess merchant viability, and did not apply the SAFE framework. Your portfolio is a reflection of your decision-making.</div>
+                </div>
+                <div class="discussion-card" onclick="this.classList.toggle('expanded')">
+                  <div class="discussion-question">🤔 Who contributes more to the business?</div>
+                  <div class="discussion-answer comparison-question">
+                    <div class="comparison-box">
+                      <div class="comparison-value">₦100M Disbursed</div>
+                      <div class="comparison-pct">10% Repayment</div>
+                      <div class="comparison-result">= ₦10M recovered</div>
+                    </div>
+                    <div class="comparison-vs">VS</div>
+                    <div class="comparison-box winner">
+                      <div class="comparison-value">₦10M Disbursed</div>
+                      <div class="comparison-pct">90% Repayment</div>
+                      <div class="comparison-result">= ₦9M recovered</div>
+                    </div>
+                    <p class="comparison-insight">The second officer demonstrates better judgement and contributes nearly as much to the bottom line with far less risk. Smart Lending is about quality, not just volume.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="interactive-section" id="m1-comparison" style="display:none">
+              <h2 class="section-title-center">Traditional Sales Thinking vs Smart Lending Thinking</h2>
+              <div class="comparison-table">
+                <div class="comparison-column traditional">
+                  <div class="comparison-header traditional-header">
+                    <span class="comp-icon">❌</span>
+                    <h3>Traditional Sales Thinking</h3>
+                  </div>
+                  <ul class="comparison-list">
+                    <li>Focus on disbursement volume</li>
+                    <li>Success = hitting disbursement targets</li>
+                    <li>Merchant is a customer number</li>
+                    <li>Move on after disbursement</li>
+                    <li>Quantity over quality</li>
+                    <li>Short-term sales mindset</li>
+                    <li>Collections is "someone else's problem"</li>
+                    <li>Celebrate disbursement day</li>
+                  </ul>
+                </div>
+                <div class="comparison-column smart">
+                  <div class="comparison-header smart-header">
+                    <span class="comp-icon">✅</span>
+                    <h3>Smart Lending Thinking</h3>
+                  </div>
+                  <ul class="comparison-list">
+                    <li>Focus on portfolio health</li>
+                    <li>Success = repayment rates</li>
+                    <li>Merchant is a business partner</li>
+                    <li>Support merchant through repayment</li>
+                    <li>Quality over quantity</li>
+                    <li>Long-term portfolio building</li>
+                    <li>Collections starts at origination</li>
+                    <li>Celebrate full repayment day</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="interactive-section" id="m1-golden" style="display:none">
+              <div class="golden-rule-container">
+                <div class="golden-rule-icon">👑</div>
+                <h2>The Golden Rule of Smart Lending</h2>
+                <blockquote class="golden-rule-text">
+                  "Never recommend a merchant simply because they qualify for a loan. Recommend them because you are confident they can repay it."
+                </blockquote>
+                <div class="golden-rule-actions">
+                  <button class="btn btn-primary mark-complete-btn" data-module="1">✓ Mark Module Complete</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="module-knowledge-check" id="m1-knowledge" style="display:none">
+              <h2>📝 Knowledge Check</h2>
+              <div class="quiz-container" id="quiz-m1">
+                <div class="quiz-progress">Question <span id="m1-q-current">1</span> of <span id="m1-q-total">5</span></div>
+                <div class="quiz-question" id="m1-question"></div>
+                <div class="quiz-options" id="m1-options"></div>
+                <div class="quiz-feedback" id="m1-feedback"></div>
+                <button class="btn btn-primary quiz-next-btn" id="m1-next" style="display:none">Next Question</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Module 2 -->
+        <div class="page" id="page-module2">
+          <div class="module-header" style="background: linear-gradient(135deg, #00c853, #009624)">
+            <div class="module-header-content">
+              <span class="module-tag">Module 2</span>
+              <h1>The Real Cause of Overdue Loans</h1>
+              <p>Understanding root causes and prevention</p>
+              <div class="module-header-meta">
+                <span>⏱ 25 minutes</span>
+                <span>📝 8 Knowledge Check Questions</span>
+              </div>
+            </div>
+          </div>
+          <div class="module-body" id="module2-body">
+            <div class="interactive-section">
+              <h2 class="section-title-center">What Really Causes Overdue Loans?</h2>
+              <p class="section-desc">Click on each answer you think is correct</p>
+              <div class="overdue-options" id="overdue-options">
+                <button class="overdue-btn" data-reveal="symptom">Merchant refused to pay</button>
+                <button class="overdue-btn" data-reveal="symptom">Economy is bad</button>
+                <button class="overdue-btn" data-reveal="symptom">Business slowed down</button>
+                <button class="overdue-btn" data-reveal="symptom">Collections failed</button>
+              </div>
+              <div class="overdue-reveal-container" id="overdue-reveal" style="display:none">
+                <div class="overdue-reveal-content">
+                  <div class="overdue-reveal-icon">🔍</div>
+                  <h3>These are all <span class="text-warning">SYMPTOMS</span></h3>
+                  <p>The real problem begins during <strong>merchant selection</strong>.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="interactive-section" id="m2-farming" style="display:none">
+              <h2 class="section-title-center">The Farming Illustration</h2>
+              <div class="farming-container">
+                <div class="farming-comparison">
+                  <div class="farming-card good">
+                    <div class="farming-icon">🌱</div>
+                    <h3>Healthy Seed</h3>
+                    <p>+</p>
+                    <h3>Healthy Soil</h3>
+                    <div class="farming-divider">⟹</div>
+                    <div class="farming-result">Good Harvest 🌾</div>
+                  </div>
+                  <div class="farming-card bad">
+                    <div class="farming-icon">🌱</div>
+                    <h3>Poor Seed</h3>
+                    <p>+</p>
+                    <h3>Poor Soil</h3>
+                    <div class="farming-divider">⟹</div>
+                    <div class="farming-result">Poor Harvest 🥀</div>
+                  </div>
+                </div>
+                <div class="farming-connection">
+                  <div class="connection-card">
+                    <div class="connection-row">
+                      <span class="conn-label">Healthy Seed = Quality Merchant</span>
+                      <span class="conn-arrow">→</span>
+                      <span class="conn-label">Healthy Soil = Right Business Environment</span>
+                    </div>
+                    <div class="connection-row">
+                      <span class="conn-label">Good Harvest = Full Repayment</span>
+                    </div>
+                  </div>
+                  <div class="connection-card">
+                    <div class="connection-row">
+                      <span class="conn-label">Poor Seed = Weak Merchant</span>
+                      <span class="conn-arrow">→</span>
+                      <span class="conn-label">Poor Soil = Unstable Business</span>
+                    </div>
+                    <div class="connection-row">
+                      <span class="conn-label">Poor Harvest = Default / Overdue</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="interactive-section" id="m2-pipeline" style="display:none">
+              <h2 class="section-title-center">The Lending Pipeline</h2>
+              <div class="pipeline-container">
+                <div class="pipeline-steps">
+                  <div class="pipeline-step" data-step="1">
+                    <div class="step-icon">👔</div>
+                    <div class="step-content">
+                      <h4>Loan Sales BD</h4>
+                      <p>First underwriting decision</p>
+                    </div>
+                    <div class="step-number">1</div>
+                  </div>
+                  <div class="pipeline-connector"></div>
+                  <div class="pipeline-step" data-step="2">
+                    <div class="step-icon">📋</div>
+                    <div class="step-content">
+                      <h4>FVO</h4>
+                      <p>Field verification</p>
+                    </div>
+                    <div class="step-number">2</div>
+                  </div>
+                  <div class="pipeline-connector"></div>
+                  <div class="pipeline-step" data-step="3">
+                    <div class="step-icon">✍️</div>
+                    <div class="step-content">
+                      <h4>Underwriter</h4>
+                      <p>Final approval</p>
+                    </div>
+                    <div class="step-number">3</div>
+                  </div>
+                  <div class="pipeline-connector"></div>
+                  <div class="pipeline-step" data-step="4">
+                    <div class="step-icon">💰</div>
+                    <div class="step-content">
+                      <h4>Collections</h4>
+                      <p>Repayment tracking</p>
+                    </div>
+                    <div class="step-number">4</div>
+                  </div>
+                </div>
+                <div class="pipeline-highlight">
+                  <div class="highlight-card">
+                    <div class="highlight-icon">⚡</div>
+                    <p><strong>Key Insight:</strong> The Loan Sales BD makes the first underwriting decision. You are the <strong>First Underwriter</strong>.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="module-nav-buttons">
+                <button class="btn btn-primary mark-complete-btn" data-module="2">✓ Mark Module Complete</button>
+              </div>
+            </div>
+
+            <div class="module-knowledge-check" id="m2-knowledge" style="display:none">
+              <h2>📝 Knowledge Check</h2>
+              <div class="quiz-container" id="quiz-m2">
+                <div class="quiz-progress">Question <span id="m2-q-current">1</span> of <span id="m2-q-total">8</span></div>
+                <div class="quiz-question" id="m2-question"></div>
+                <div class="quiz-options" id="m2-options"></div>
+                <div class="quiz-feedback" id="m2-feedback"></div>
+                <button class="btn btn-primary quiz-next-btn" id="m2-next" style="display:none">Next Question</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Module 3 -->
+        <div class="page" id="page-module3">
+          <div class="module-header" style="background: linear-gradient(135deg, #ff6d00, #e65100)">
+            <div class="module-header-content">
+              <span class="module-tag">Module 3</span>
+              <h1>Identifying Quality Merchants</h1>
+              <p>SAFE Framework & Merchant Quality Scorecard</p>
+              <div class="module-header-meta">
+                <span>⏱ 35 minutes</span>
+                <span>📝 10 Knowledge Check Questions</span>
+              </div>
+            </div>
+          </div>
+          <div class="module-body" id="module3-body">
+            <div class="interactive-section">
+              <h2 class="section-title-center">The SAFE Framework</h2>
+              <p class="section-desc">A comprehensive approach to merchant evaluation</p>
+              <div class="safe-cards">
+                <div class="safe-card" onclick="this.classList.toggle('expanded')">
+                  <div class="safe-card-header" style="background: linear-gradient(135deg, #1a73e8, #0d47a1)">
+                    <span class="safe-letter">S</span>
+                    <div class="safe-title-group">
+                      <h3>Stability</h3>
+                      <span class="safe-subtitle">How long has the business been operating?</span>
+                    </div>
+                    <span class="safe-expand-icon">+</span>
+                  </div>
+                  <div class="safe-card-body">
+                    <div class="safe-section">
+                      <h4>Meaning</h4>
+                      <p>Stability refers to how long the merchant's business has been operational and how consistent their revenue streams are. A stable business has demonstrated its ability to survive market fluctuations and maintain operations over time.</p>
+                    </div>
+                    <div class="safe-section">
+                      <h4>What to Observe</h4>
+                      <ul>
+                        <li>Years in operation (minimum 1-2 years preferred)</li>
+                        <li>Consistency of business location</li>
+                        <li>Revenue patterns (seasonal vs steady)</li>
+                        <li>Number of employees and staff retention</li>
+                        <li>Business registration and licenses</li>
+                      </ul>
+                    </div>
+                    <div class="safe-section">
+                      <h4>Questions to Ask</h4>
+                      <ul>
+                        <li>How long have you been running this business?</li>
+                        <li>Have you operated from the same location throughout?</li>
+                        <li>What are your busiest and slowest months?</li>
+                        <li>How many staff do you employ? How long have they worked for you?</li>
+                        <li>Do you have a business registration certificate?</li>
+                      </ul>
+                    </div>
+                    <div class="safe-section">
+                      <h4>Real-life Examples</h4>
+                      <p><strong>Good:</strong> A grocery store that has been operating in the same location for 5 years, with consistent monthly revenue of ₦2-3M and 4 employees who have been with the business for 2+ years.</p>
+                      <p><strong>Risky:</strong> A new boutique that opened 3 months ago with no established customer base and fluctuating revenue.</p>
+                    </div>
+                    <div class="safe-section">
+                      <h4>Common Mistakes</h4>
+                      <ul>
+                        <li>Confusing business age with business health</li>
+                        <li>Not verifying the actual operational history</li>
+                        <li>Ignoring seasonal revenue fluctuations</li>
+                      </ul>
+                    </div>
+                    <div class="safe-section">
+                      <h4>Best Practices</h4>
+                      <ul>
+                        <li>Always verify operational history through physical visits</li>
+                        <li>Check for consistent revenue over at least 6-12 months</li>
+                        <li>Assess the business's ability to withstand economic shocks</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="safe-card" onclick="this.classList.toggle('expanded')">
+                  <div class="safe-card-header" style="background: linear-gradient(135deg, #00c853, #009624)">
+                    <span class="safe-letter">A</span>
+                    <div class="safe-title-group">
+                      <h3>Ability to Repay</h3>
+                      <span class="safe-subtitle">Can the business generate enough cash flow?</span>
+                    </div>
+                    <span class="safe-expand-icon">+</span>
+                  </div>
+                  <div class="safe-card-body">
+                    <div class="safe-section">
+                      <h4>Meaning</h4>
+                      <p>Ability to Repay measures whether the merchant's business generates sufficient and reliable cash flow to meet loan repayment obligations without straining operations.</p>
+                    </div>
+                    <div class="safe-section">
+                      <h4>What to Observe</h4>
+                      <ul>
+                        <li>Daily/weekly/monthly revenue</li>
+                        <li>Profit margins (gross and net)</li>
+                        <li>Operating expenses and overhead</li>
+                        <li>Existing debt obligations</li>
+                        <li>Cash flow patterns and cycles</li>
+                      </ul>
+                    </div>
+                    <div class="safe-section">
+                      <h4>Questions to Ask</h4>
+                      <ul>
+                        <li>What is your average daily or weekly revenue?</li>
+                        <li>What are your major expenses each month?</li>
+                        <li>Do you have any other loans or obligations?</li>
+                        <li>How much profit do you take home monthly?</li>
+                        <li>What would happen if your revenue dropped by 30%?</li>
+                      </ul>
+                    </div>
+                    <div class="safe-section">
+                      <h4>Real-life Examples</h4>
+                      <p><strong>Good:</strong> A restaurant with daily revenue of ₦80,000, monthly expenses of ₦1.2M, net profit of ₦1.2M/month, requesting a ₦500,000 loan with monthly repayment of ₦55,000.</p>
+                      <p><strong>Risky:</strong> A fashion business with irregular weekly revenue, thin margins, and already servicing two other loans.</p>
+                    </div>
+                    <div class="safe-section">
+                      <h4>Common Mistakes</h4>
+                      <ul>
+                        <li>Relying solely on stated revenue without verification</li>
+                        <li>Not considering existing debt service obligations</li>
+                        <li>Ignoring personal expenses that may affect business cash flow</li>
+                      </ul>
+                    </div>
+                    <div class="safe-section">
+                      <h4>Best Practices</h4>
+                      <ul>
+                        <li>Triangulate revenue data from multiple sources (bank statements, stock records, customer traffic)</li>
+                        <li>Ensure Debt Service Coverage Ratio (DSCR) is at least 1.5x</li>
+                        <li>Verify expenses through supplier receipts and rent agreements</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="safe-card" onclick="this.classList.toggle('expanded')">
+                  <div class="safe-card-header" style="background: linear-gradient(135deg, #ff6d00, #e65100)">
+                    <span class="safe-letter">F</span>
+                    <div class="safe-title-group">
+                      <h3>Financial Discipline</h3>
+                      <span class="safe-subtitle">Does the merchant manage money responsibly?</span>
+                    </div>
+                    <span class="safe-expand-icon">+</span>
+                  </div>
+                  <div class="safe-card-body">
+                    <div class="safe-section">
+                      <h4>Meaning</h4>
+                      <p>Financial Discipline assesses how the merchant manages their finances, including record-keeping, separation of business and personal funds, savings habits, and past credit behavior.</p>
+                    </div>
+                    <div class="safe-section">
+                      <h4>What to Observe</h4>
+                      <ul>
+                        <li>Quality of financial records</li>
+                        <li>Separation of business and personal accounts</li>
+                        <li>Savings history and patterns</li>
+                        <li>Past loan repayment history</li>
+                        <li>Inventory management</li>
+                      </ul>
+                    </div>
+                    <div class="safe-section">
+                      <h4>Questions to Ask</h4>
+                      <ul>
+                        <li>Do you keep records of your daily sales?</li>
+                        <li>Do you have a separate bank account for your business?</li>
+                        <li>How much do you save monthly?</li>
+                        <li>Have you taken a loan before? How did you repay it?</li>
+                        <li>How do you track your inventory?</li>
+                      </ul>
+                    </div>
+                    <div class="safe-section">
+                      <h4>Real-life Examples</h4>
+                      <p><strong>Good:</strong> A merchant who maintains a separate business account, keeps daily sales records in a notebook or app, saves ₦50,000 monthly, and has a clean repayment history on a previous loan.</p>
+                      <p><strong>Risky:</strong> A merchant with no records, mixes business and personal funds, has no savings, and has missed payments on previous obligations.</p>
+                    </div>
+                    <div class="safe-section">
+                      <h4>Common Mistakes</h4>
+                      <ul>
+                        <li>Accepting verbal claims without documentation</li>
+                        <li>Not checking credit bureau reports</li>
+                        <li>Overlooking informal savings patterns</li>
+                      </ul>
+                    </div>
+                    <div class="safe-section">
+                      <h4>Best Practices</h4>
+                      <ul>
+                        <li>Request bank statements for the last 3-6 months</li>
+                        <li>Check credit bureau history</li>
+                        <li>Observe the merchant's physical shop organization as a proxy for financial organization</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="safe-card" onclick="this.classList.toggle('expanded')">
+                  <div class="safe-card-header" style="background: linear-gradient(135deg, #d500f9, #aa00ff)">
+                    <span class="safe-letter">E</span>
+                    <div class="safe-title-group">
+                      <h3>Engagement</h3>
+                      <span class="safe-subtitle">Is the merchant committed and responsive?</span>
+                    </div>
+                    <span class="safe-expand-icon">+</span>
+                  </div>
+                  <div class="safe-card-body">
+                    <div class="safe-section">
+                      <h4>Meaning</h4>
+                      <p>Engagement measures the merchant's willingness to cooperate, transparency in sharing information, responsiveness to communication, and commitment to the loan process.</p>
+                    </div>
+                    <div class="safe-section">
+                      <h4>What to Observe</h4>
+                      <ul>
+                        <li>Responsiveness to calls and messages</li>
+                        <li>Willingness to provide documentation</li>
+                        <li>Transparency about business challenges</li>
+                        <li>Attitude during the application process</li>
+                        <li>References and community reputation</li>
+                      </ul>
+                    </div>
+                    <div class="safe-section">
+                      <h4>Questions to Ask</h4>
+                      <ul>
+                        <li>How quickly do you respond to customer inquiries?</li>
+                        <li>Can you provide references from suppliers or customers?</li>
+                        <li>What challenges is your business currently facing?</li>
+                        <li>How do you handle customer complaints?</li>
+                        <li>Are you willing to sign up for automatic repayment?</li>
+                      </ul>
+                    </div>
+                    <div class="safe-section">
+                      <h4>Real-life Examples</h4>
+                      <p><strong>Good:</strong> A merchant who promptly provides all required documents, answers calls, is transparent about a temporary business slowdown, and has good relationships with suppliers.</p>
+                      <p><strong>Risky:</strong> A merchant who is evasive about providing documents, doesn't answer calls, and seems to be hiding information about their business.</p>
+                    </div>
+                    <div class="safe-section">
+                      <h4>Common Mistakes</h4>
+                      <ul>
+                        <li>Ignoring red flags in merchant behavior</li>
+                        <li>Not verifying references</li>
+                        <li>Assuming responsiveness during application will continue after disbursement</li>
+                      </ul>
+                    </div>
+                    <div class="safe-section">
+                      <h4>Best Practices</h4>
+                      <ul>
+                        <li>Build rapport to encourage transparency</li>
+                        <li>Check references and community standing</li>
+                        <li>Set clear expectations about communication from the start</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="interactive-section" id="m3-scorecard">
+              <h2 class="section-title-center">Merchant Quality Scorecard</h2>
+              <p class="section-desc">Score each area to evaluate merchant quality</p>
+              <div class="scorecard-container">
+                <div class="scorecard-categories" id="scorecard-categories">
+                  <div class="scorecard-item" data-category="stability">
+                    <div class="scorecard-header">
+                      <span class="scorecard-label">Business Stability</span>
+                      <span class="scorecard-value" id="score-stability">0/15</span>
+                    </div>
+                    <input type="range" class="scorecard-slider" min="0" max="15" value="0" data-category="stability">
+                    <div class="scorecard-scale">
+                      <span>Poor</span><span>Fair</span><span>Good</span><span>Excellent</span>
+                    </div>
+                  </div>
+                  <div class="scorecard-item" data-category="need">
+                    <div class="scorecard-header">
+                      <span class="scorecard-label">Business Need</span>
+                      <span class="scorecard-value" id="score-need">0/10</span>
+                    </div>
+                    <input type="range" class="scorecard-slider" min="0" max="10" value="0" data-category="need">
+                    <div class="scorecard-scale">
+                      <span>Poor</span><span>Fair</span><span>Good</span><span>Excellent</span>
+                    </div>
+                  </div>
+                  <div class="scorecard-item" data-category="repay">
+                    <div class="scorecard-header">
+                      <span class="scorecard-label">Ability to Repay</span>
+                      <span class="scorecard-value" id="score-repay">0/20</span>
+                    </div>
+                    <input type="range" class="scorecard-slider" min="0" max="20" value="0" data-category="repay">
+                    <div class="scorecard-scale">
+                      <span>Poor</span><span>Fair</span><span>Good</span><span>Excellent</span>
+                    </div>
+                  </div>
+                  <div class="scorecard-item" data-category="discipline">
+                    <div class="scorecard-header">
+                      <span class="scorecard-label">Financial Discipline</span>
+                      <span class="scorecard-value" id="score-discipline">0/15</span>
+                    </div>
+                    <input type="range" class="scorecard-slider" min="0" max="15" value="0" data-category="discipline">
+                    <div class="scorecard-scale">
+                      <span>Poor</span><span>Fair</span><span>Good</span><span>Excellent</span>
+                    </div>
+                  </div>
+                  <div class="scorecard-item" data-category="character">
+                    <div class="scorecard-header">
+                      <span class="scorecard-label">Character & Engagement</span>
+                      <span class="scorecard-value" id="score-character">0/15</span>
+                    </div>
+                    <input type="range" class="scorecard-slider" min="0" max="15" value="0" data-category="character">
+                    <div class="scorecard-scale">
+                      <span>Poor</span><span>Fair</span><span>Good</span><span>Excellent</span>
+                    </div>
+                  </div>
+                  <div class="scorecard-item" data-category="documentation">
+                    <div class="scorecard-header">
+                      <span class="scorecard-label">Documentation & KYC</span>
+                      <span class="scorecard-value" id="score-documentation">0/10</span>
+                    </div>
+                    <input type="range" class="scorecard-slider" min="0" max="10" value="0" data-category="documentation">
+                    <div class="scorecard-scale">
+                      <span>Poor</span><span>Fair</span><span>Good</span><span>Excellent</span>
+                    </div>
+                  </div>
+                  <div class="scorecard-item" data-category="guarantor">
+                    <div class="scorecard-header">
+                      <span class="scorecard-label">Guarantor Strength</span>
+                      <span class="scorecard-value" id="score-guarantor">0/15</span>
+                    </div>
+                    <input type="range" class="scorecard-slider" min="0" max="15" value="0" data-category="guarantor">
+                    <div class="scorecard-scale">
+                      <span>Poor</span><span>Fair</span><span>Good</span><span>Excellent</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="scorecard-result" id="scorecard-result">
+                  <div class="scorecard-total">
+                    <span class="scorecard-total-label">Total Score</span>
+                    <span class="scorecard-total-value" id="scorecard-total-value">0</span>
+                    <span class="scorecard-total-max">/ 100</span>
+                  </div>
+                  <div class="scorecard-recommendation" id="scorecard-recommendation">
+                    <div class="rec-icon">📊</div>
+                    <div class="rec-text">Adjust scores to see recommendation</div>
+                  </div>
+                  <div class="scorecard-gauge">
+                    <div class="gauge-fill" id="gauge-fill" style="width: 0%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="module-knowledge-check" id="m3-knowledge" style="display:none">
+              <h2>📝 Knowledge Check</h2>
+              <div class="quiz-container" id="quiz-m3">
+                <div class="quiz-progress">Question <span id="m3-q-current">1</span> of <span id="m3-q-total">10</span></div>
+                <div class="quiz-question" id="m3-question"></div>
+                <div class="quiz-options" id="m3-options"></div>
+                <div class="quiz-feedback" id="m3-feedback"></div>
+                <button class="btn btn-primary quiz-next-btn" id="m3-next" style="display:none">Next Question</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Module 4 -->
+        <div class="page" id="page-module4">
+          <div class="module-header" style="background: linear-gradient(135deg, #d500f9, #aa00ff)">
+            <div class="module-header-content">
+              <span class="module-tag">Module 4</span>
+              <h1>The Loan Has Been Disbursed... Now What?</h1>
+              <p>90-Day Merchant Success Journey & Post-Disbursement Management</p>
+              <div class="module-header-meta">
+                <span>⏱ 30 minutes</span>
+                <span>📝 8 Knowledge Check Questions</span>
+              </div>
+            </div>
+          </div>
+          <div class="module-body" id="module4-body">
+            <div class="interactive-section">
+              <div class="mindset-container">
+                <div class="mindset-hero">
+                  <div class="mindset-icon">✅</div>
+                  <h2>The merchant has collected the loan.</h2>
+                  <div class="mindset-question">
+                    <strong>Has your work been completed?</strong>
+                  </div>
+                  <div class="mindset-buttons">
+                    <button class="btn btn-primary mindset-btn-m4" data-answer="yes">YES</button>
+                    <button class="btn btn-outline mindset-btn-m4" data-answer="no">NOT YET</button>
+                  </div>
+                  <div class="mindset-reveal" id="mindset-reveal-m4" style="display:none">
+                    <div class="reveal-content">
+                      <div class="reveal-icon">💡</div>
+                      <h3>Remember:</h3>
+                      <p class="reveal-text highlight">Repayment is Success</p>
+                      <p class="reveal-explanation">Disbursement is the beginning of your real work. Now you must guide the merchant through the 90-Day Success Journey to ensure full repayment.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="interactive-section" id="m4-timeline" style="display:none">
+              <h2 class="section-title-center">The 90-Day Merchant Success Journey</h2>
+              <div class="timeline-container">
+                <div class="timeline-item" onclick="this.classList.toggle('expanded')">
+                  <div class="timeline-marker" style="background: #1a73e8">Day 1</div>
+                  <div class="timeline-content">
+                    <h4>Disbursement Day</h4>
+                    <div class="timeline-body">
+                      <p><strong>Objectives:</strong> Ensure the merchant receives the funds and understands the terms</p>
+                      <p><strong>BD Activities:</strong> Confirm fund receipt, review repayment schedule, answer questions</p>
+                      <p><strong>Expected Outcomes:</strong> Merchant is clear on terms and repayment dates</p>
+                      <p><strong>Warning Signs:</strong> Merchant seems confused or requests changes to terms</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="timeline-item" onclick="this.classList.toggle('expanded')">
+                  <div class="timeline-marker" style="background: #4fc3f7">3-5 Days</div>
+                  <div class="timeline-content">
+                    <h4>First Check-In</h4>
+                    <div class="timeline-body">
+                      <p><strong>Objectives:</strong> Verify funds are being used as intended</p>
+                      <p><strong>BD Activities:</strong> Visit merchant, observe business activity, document fund usage</p>
+                      <p><strong>Expected Outcomes:</strong> Funds are being deployed for stated business purpose</p>
+                      <p><strong>Warning Signs:</strong> Funds not used as agreed, business seems unchanged</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="timeline-item" onclick="this.classList.toggle('expanded')">
+                  <div class="timeline-marker" style="background: #4fc3f7">1-2 Weeks</div>
+                  <div class="timeline-content">
+                    <h4>Business Activity Check</h4>
+                    <div class="timeline-body">
+                      <p><strong>Objectives:</strong> Monitor business performance and early impact of loan</p>
+                      <p><strong>BD Activities:</strong> Review stock levels, customer traffic, revenue trends</p>
+                      <p><strong>Expected Outcomes:</strong> Visible improvement in stock or business activity</p>
+                      <p><strong>Warning Signs:</strong> No visible change or business seems slower than usual</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="timeline-item" onclick="this.classList.toggle('expanded')">
+                  <div class="timeline-marker" style="background: #ffab00">2 Weeks Before Due</div>
+                  <div class="timeline-content">
+                    <h4>Pre-Repayment Preparation</h4>
+                    <div class="timeline-body">
+                      <p><strong>Objectives:</strong> Prepare merchant for upcoming repayment</p>
+                      <p><strong>BD Activities:</strong> Remind merchant of due date, confirm amount, discuss any challenges</p>
+                      <p><strong>Expected Outcomes:</strong> Merchant acknowledges and is prepared for repayment</p>
+                      <p><strong>Warning Signs:</strong> Merchant avoids conversation, makes excuses, or seems stressed</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="timeline-item" onclick="this.classList.toggle('expanded')">
+                  <div class="timeline-marker" style="background: #ffab00">1 Week Before Due</div>
+                  <div class="timeline-content">
+                    <h4>Final Reminder</h4>
+                    <div class="timeline-body">
+                      <p><strong>Objectives:</strong> Ensure repayment readiness</p>
+                      <p><strong>BD Activities:</strong> Confirm payment method, address any last-minute concerns, reinforce commitment</p>
+                      <p><strong>Expected Outcomes:</strong> Merchant confirms readiness to repay</p>
+                      <p><strong>Warning Signs:</strong> Merchant lacks funds, asks for extension, or is unreachable</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="timeline-item" onclick="this.classList.toggle('expanded')">
+                  <div class="timeline-marker" style="background: #00c853">Due Date</div>
+                  <div class="timeline-content">
+                    <h4>Repayment Day</h4>
+                    <div class="timeline-body">
+                      <p><strong>Objectives:</strong> Successful repayment collection</p>
+                      <p><strong>BD Activities:</strong> Confirm payment is made, thank merchant, document successful repayment</p>
+                      <p><strong>Expected Outcomes:</strong> Full repayment received</p>
+                      <p><strong>Warning Signs:</strong> Payment not received, merchant unreachable</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="timeline-item" onclick="this.classList.toggle('expanded')">
+                  <div class="timeline-marker" style="background: #ff5252">3 Days After Due</div>
+                  <div class="timeline-content">
+                    <h4>Early Delinquency Check</h4>
+                    <div class="timeline-body">
+                      <p><strong>Objectives:</strong> Address any delay immediately</p>
+                      <p><strong>BD Activities:</strong> Immediate contact, understand reason, create repayment plan</p>
+                      <p><strong>Expected Outcomes:</strong> Merchant commits to new payment date</p>
+                      <p><strong>Warning Signs:</strong> No response, broken promises, avoidance</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="timeline-item" onclick="this.classList.toggle('expanded')">
+                  <div class="timeline-marker" style="background: #d50000">7-14 Days After Due</div>
+                  <div class="timeline-content">
+                    <h4>Escalation Point</h4>
+                    <div class="timeline-body">
+                      <p><strong>Objectives:</strong> Escalate to collections team</p>
+                      <p><strong>BD Activities:</strong> Handover with complete documentation, provide context</p>
+                      <p><strong>Expected Outcomes:</strong> Smooth transition to collections</p>
+                      <p><strong>Warning Signs:</strong> Merchant disappears, business closed, phone off</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="interactive-section" id="m4-traffic" style="display:none">
+              <h2 class="section-title-center">Traffic Light Monitoring System</h2>
+              <div class="traffic-container">
+                <div class="traffic-card green" onclick="this.classList.toggle('expanded')">
+                  <div class="traffic-header">
+                    <div class="traffic-light green"></div>
+                    <h3>Green Merchant</h3>
+                    <span class="traffic-expand-hint">Click for details</span>
+                  </div>
+                  <div class="traffic-body">
+                    <div class="traffic-detail">
+                      <p><strong>Merchant Behaviour:</strong> Pays on time, communicates proactively, business is thriving</p>
+                      <p><strong>Business Health:</strong> Strong revenue, good cash flow, stable operations</p>
+                      <p><strong>Risk Level:</strong> Low</p>
+                      <p><strong>Required Action:</strong> Maintain relationship, consider graduation to higher loan amounts</p>
+                      <p><strong>Escalation Process:</strong> No escalation needed</p>
+                    </div>
+                    <div class="traffic-practices">
+                      <h4>Best Practices for Green Merchants</h4>
+                      <ul>
+                        <li>Send thank-you messages after repayment</li>
+                        <li>Maintain regular check-ins (monthly)</li>
+                        <li>Offer loyalty benefits or faster processing for future loans</li>
+                        <li>Request referrals to other quality merchants</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="traffic-card amber" onclick="this.classList.toggle('expanded')">
+                  <div class="traffic-header">
+                    <div class="traffic-light amber"></div>
+                    <h3>Yellow Merchant</h3>
+                    <span class="traffic-expand-hint">Click for details</span>
+                  </div>
+                  <div class="traffic-body">
+                    <div class="traffic-detail">
+                      <p><strong>Merchant Behaviour:</strong> Sometimes late, occasionally unreachable, business showing some stress</p>
+                      <p><strong>Business Health:</strong> Revenue fluctuations, some operational challenges</p>
+                      <p><strong>Risk Level:</strong> Medium</p>
+                      <p><strong>Required Action:</strong> Increase monitoring frequency, understand challenges, provide support</p>
+                      <p><strong>Escalation Process:</strong> Flag to team lead, create intervention plan</p>
+                    </div>
+                    <div class="traffic-practices">
+                      <h4>Best Practices for Yellow Merchants</h4>
+                      <ul>
+                        <li>Increase check-in frequency to weekly</li>
+                        <li>Understand root cause of business challenges</li>
+                        <li>Offer business advice or connect to resources</li>
+                        <li>Consider restructuring if needed</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="traffic-card red" onclick="this.classList.toggle('expanded')">
+                  <div class="traffic-header">
+                    <div class="traffic-light red"></div>
+                    <h3>Red Merchant</h3>
+                    <span class="traffic-expand-hint">Click for details</span>
+                  </div>
+                  <div class="traffic-body">
+                    <div class="traffic-detail">
+                      <p><strong>Merchant Behaviour:</strong> Consistent delinquency, unreachable, business may be distressed or closed</p>
+                      <p><strong>Business Health:</strong> Severe revenue decline or business closure</p>
+                      <p><strong>Risk Level:</strong> High</p>
+                      <p><strong>Required Action:</strong> Immediate escalation to collections, prepare legal action if needed</p>
+                      <p><strong>Escalation Process:</strong> Full handover to collections team with all documentation</p>
+                    </div>
+                    <div class="traffic-practices">
+                      <h4>Best Practices for Red Merchants</h4>
+                      <ul>
+                        <li>Document all communication attempts</li>
+                        <li>Escalate early rather than waiting</li>
+                        <li>Provide complete merchant file to collections</li>
+                        <li>Analyze what went wrong to improve future selection</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="module-nav-buttons">
+                <button class="btn btn-primary mark-complete-btn" data-module="4">✓ Mark Module Complete</button>
+              </div>
+            </div>
+
+            <div class="module-knowledge-check" id="m4-knowledge" style="display:none">
+              <h2>📝 Knowledge Check</h2>
+              <div class="quiz-container" id="quiz-m4">
+                <div class="quiz-progress">Question <span id="m4-q-current">1</span> of <span id="m4-q-total">8</span></div>
+                <div class="quiz-question" id="m4-question"></div>
+                <div class="quiz-options" id="m4-options"></div>
+                <div class="quiz-feedback" id="m4-feedback"></div>
+                <button class="btn btn-primary quiz-next-btn" id="m4-next" style="display:none">Next Question</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Final Assessment -->
+        <div class="page" id="page-assessment">
+          <div class="module-header" style="background: linear-gradient(135deg, #1a73e8, #0d47a1)">
+            <div class="module-header-content">
+              <span class="module-tag">Final Assessment</span>
+              <h1>Smart Lending Certification Exam</h1>
+              <p>Demonstrate your mastery of portfolio building</p>
+              <div class="module-header-meta">
+                <span>📝 15 Questions</span>
+                <span>🎯 Passing Score: 80%</span>
+              </div>
+            </div>
+          </div>
+          <div class="module-body">
+            <div id="assessment-container">
+              <div class="assessment-info-card">
+                <h3>Assessment Instructions</h3>
+                <ul>
+                  <li>This assessment contains 15 questions covering all 4 modules</li>
+                  <li>You need a score of <strong>80% (12/15)</strong> or higher to pass</li>
+                  <li>Questions include multiple choice, true/false, and scenario-based questions</li>
+                  <li>You cannot go back to previous questions</li>
+                  <li>Read each question carefully before answering</li>
+                </ul>
+                <button class="btn btn-primary" id="start-assessment-btn">Start Assessment</button>
+              </div>
+              <div id="assessment-quiz" style="display:none">
+                <div class="quiz-container">
+                  <div class="quiz-progress">Question <span id="assessment-current">1</span> of <span id="assessment-total">15</span></div>
+                  <div class="progress-bar-assessment">
+                    <div class="progress-fill-assessment" id="assessment-progress-fill" style="width: 0%"></div>
+                  </div>
+                  <div class="quiz-question" id="assessment-question"></div>
+                  <div class="quiz-options" id="assessment-options"></div>
+                  <div class="quiz-feedback" id="assessment-feedback"></div>
+                  <button class="btn btn-primary" id="assessment-next" style="display:none">Next Question</button>
+                </div>
+              </div>
+              <div id="assessment-result" style="display:none">
+                <div class="result-container">
+                  <div class="result-icon" id="result-icon">🏆</div>
+                  <h2 id="result-title">Assessment Complete!</h2>
+                  <div class="result-score">
+                    <span class="result-score-value" id="result-score">0</span>
+                    <span class="result-score-max">/15</span>
+                  </div>
+                  <div class="result-percentage" id="result-percentage">0%</div>
+                  <div class="result-status" id="result-status">--</div>
+                  <div class="result-details" id="result-details"></div>
+                  <div class="result-actions">
+                    <button class="btn btn-primary" id="view-certificate-btn">View Certificate</button>
+                    <button class="btn btn-outline" id="retake-assessment-btn">Retake Assessment</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificate -->
+        <div class="page" id="page-certificate">
+          <div class="module-header" style="background: linear-gradient(135deg, #ff6d00, #e65100)">
+            <div class="module-header-content">
+              <span class="module-tag">Achievement</span>
+              <h1>Your Certificate</h1>
+              <p>Smart Lending Academy Certification</p>
+            </div>
+          </div>
+          <div class="module-body">
+            <div class="certificate-container">
+              <div class="certificate-form">
+                <h3>Enter Your Name for Certificate</h3>
+                <div class="form-group">
+                  <input type="text" id="cert-name-input" class="form-input" placeholder="Enter your full name" maxlength="50">
+                </div>
+                <button class="btn btn-primary" id="generate-cert-btn">Generate Certificate</button>
+              </div>
+              <div class="certificate-display" id="certificate-display" style="display:none">
+                <div class="certificate-card" id="certificate-card">
+                  <div class="certificate-badge">🏆</div>
+                  <h2 class="certificate-title">SMART LENDING ACADEMY</h2>
+                  <p class="certificate-subtitle">Building Healthy Loan Portfolios Through Better Merchant Selection and Relationship Management</p>
+                  <div class="certificate-divider"></div>
+                  <p class="certificate-label">This certifies that</p>
+                  <h3 class="certificate-name" id="cert-display-name">Student Name</h3>
+                  <p class="certificate-desc">has successfully completed all modules of the Smart Lending Academy training program and demonstrated mastery in portfolio-based lending, merchant evaluation, and post-disbursement management.</p>
+                  <div class="certificate-footer-rows">
+                    <div class="certificate-date">
+                      <span class="cert-footer-label">Date Completed</span>
+                      <span id="cert-date">--</span>
+                    </div>
+                    <div class="certificate-id">
+                      <span class="cert-footer-label">Certificate ID</span>
+                      <span id="cert-id">--</span>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-primary" id="download-cert-btn">Download Certificate</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Glossary -->
+        <div class="page" id="page-glossary">
+          <div class="module-header" style="background: linear-gradient(135deg, #1a73e8, #0d47a1)">
+            <div class="module-header-content">
+              <span class="module-tag">Reference</span>
+              <h1>Glossary</h1>
+              <p>Key terms and definitions for Smart Lending</p>
+            </div>
+          </div>
+          <div class="module-body">
+            <div class="glossary-search">
+              <input type="text" id="glossary-search-input" class="form-input" placeholder="Search glossary terms...">
+            </div>
+            <div class="glossary-list" id="glossary-list"></div>
+          </div>
+        </div>
+
+        <!-- Bookmarks -->
+        <div class="page" id="page-bookmarks">
+          <div class="module-header" style="background: linear-gradient(135deg, #d500f9, #aa00ff)">
+            <div class="module-header-content">
+              <span class="module-tag">Saved</span>
+              <h1>Bookmarks</h1>
+              <p>Your saved content for quick reference</p>
+            </div>
+          </div>
+          <div class="module-body">
+            <div class="bookmarks-container" id="bookmarks-container">
+              <div class="empty-state">
+                <span class="empty-icon">🔖</span>
+                <h3>No bookmarks yet</h3>
+                <p>Click the bookmark icon on any page to save it here</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
