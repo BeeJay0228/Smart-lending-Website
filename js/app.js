@@ -11,12 +11,12 @@ const App = {
     timerInterval: null,
     bookmarks: [],
     modules: {
-      1: { status: 'not_started', progress: 0, quizScore: 0, quizCompleted: false, answers: [], quizDate: '' },
-      2: { status: 'locked', progress: 0, quizScore: 0, quizCompleted: false, answers: [], quizDate: '' },
-      3: { status: 'locked', progress: 0, quizScore: 0, quizCompleted: false, answers: [], quizDate: '' },
-      4: { status: 'locked', progress: 0, quizScore: 0, quizCompleted: false, answers: [], quizDate: '' },
+      1: { status: 'not_started', progress: 0, quizScore: 0, quizCompleted: false },
+      2: { status: 'locked', progress: 0, quizScore: 0, quizCompleted: false },
+      3: { status: 'locked', progress: 0, quizScore: 0, quizCompleted: false },
+      4: { status: 'locked', progress: 0, quizScore: 0, quizCompleted: false },
     },
-    assessment: { completed: false, score: 0, total: 15, passed: false, answers: [], date: '', retakeUsed: false, previousResult: null },
+    assessment: { completed: false, score: 0, passed: false },
     certificate: { generated: false, name: '', date: '', id: '' },
     scorecard: {
       stability: 0, need: 0, repay: 0, discipline: 0,
@@ -388,16 +388,12 @@ const App = {
         const data = JSON.parse(saved);
         this.state.darkMode = data.darkMode || false;
         this.state.timerSeconds = data.timerSeconds || 0;
-        const defAssessment = { completed: false, score: 0, total: 15, passed: false, answers: [], date: '', retakeUsed: false, previousResult: null };
-        this.state.assessment = data.assessment ? { ...defAssessment, ...data.assessment } : defAssessment;
+        this.state.assessment = data.assessment || { completed: false, score: 0, passed: false };
         this.state.certificate = data.certificate || { generated: false, name: '', date: '', id: '' };
         this.state.scorecard = data.scorecard || { stability: 0, need: 0, repay: 0, discipline: 0, character: 0, documentation: 0, guarantor: 0 };
         this.state.bookmarks = data.bookmarks || [];
         if (data.modules) {
-          for (let m = 1; m <= 4; m++) {
-            const defaults = { status: m === 1 ? 'not_started' : 'locked', progress: 0, quizScore: 0, quizCompleted: false, answers: [], quizDate: '' };
-            this.state.modules[m] = data.modules[m] ? { ...defaults, ...data.modules[m] } : defaults;
-          }
+          this.state.modules = data.modules;
         }
       }
     } catch (e) {}
@@ -483,18 +479,6 @@ const App = {
     if (page === 'module3') this.showModuleContent(3);
     if (page === 'module4') this.showModuleContent(4);
 
-    if (page === 'assessment') {
-      const assessment = this.state.assessment;
-      if (assessment.completed) {
-        this.showAssessmentDashboard();
-      } else {
-        document.getElementById('assessment-info-card').style.display = 'block';
-        document.getElementById('assessment-quiz').style.display = 'none';
-        document.getElementById('assessment-result').style.display = 'none';
-        document.getElementById('assessment-dashboard').style.display = 'none';
-      }
-    }
-
     this.closeSidebar();
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -538,136 +522,6 @@ const App = {
         if (el) el.style.display = s.check() ? 'block' : 'none';
       }
     });
-
-    // Show completion banner if module is completed
-    const modState = this.state.modules[moduleNum];
-    if (modState.status === 'completed' && modState.quizCompleted) {
-      this.showModuleBanner(moduleNum);
-      const quizContainer = document.getElementById(`quiz-m${moduleNum}`);
-      if (quizContainer) quizContainer.style.display = 'none';
-    }
-  },
-
-  showModuleBanner(modNum) {
-    const banner = document.getElementById(`m${modNum}-completed-banner`);
-    if (!banner) return;
-    const modState = this.state.modules[modNum];
-    const total = this.quizzes[`m${modNum}`]?.questions.length || 0;
-    const pct = total > 0 ? Math.round((modState.quizScore / total) * 100) : 0;
-
-    banner.style.display = 'block';
-    banner.innerHTML = `
-      <div style="padding: 20px; margin-bottom: 20px; background: linear-gradient(135deg, rgba(0,200,83,0.06), rgba(0,200,83,0.02)); border-radius: var(--radius-lg); border: 1px solid rgba(0,200,83,0.2);">
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-          <span style="font-size: 24px;">✅</span>
-          <div>
-            <h3 style="color: var(--secondary); font-size: 18px;">Module Completed Successfully</h3>
-            <p style="color: var(--text-secondary); font-size: 13px;">You have already completed this module.</p>
-          </div>
-        </div>
-        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px;">
-          <div style="padding: 8px 16px; background: var(--bg-card); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-            <span style="font-size: 12px; color: var(--text-tertiary);">Score</span>
-            <div style="font-size: 16px; font-weight: 700; color: var(--text-primary);">${pct}% (${modState.quizScore}/${total})</div>
-          </div>
-          <div style="padding: 8px 16px; background: var(--bg-card); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-            <span style="font-size: 12px; color: var(--text-tertiary);">Completed On</span>
-            <div style="font-size: 16px; font-weight: 700; color: var(--text-primary);">${modState.quizDate || 'N/A'}</div>
-          </div>
-        </div>
-        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-          <button class="btn btn-outline" onclick="App.showModuleAnswers(${modNum})">📋 View My Answers</button>
-          <button class="btn btn-primary" onclick="App.retakeModuleQuiz(${modNum})">🔄 Retake Knowledge Assessment</button>
-        </div>
-      </div>
-    `;
-  },
-
-  showModuleAnswers(modNum) {
-    const modState = this.state.modules[modNum];
-    if (!modState.answers || modState.answers.length === 0) {
-      this.showToast('No answers data available', 'error');
-      return;
-    }
-
-    const banner = document.getElementById(`m${modNum}-completed-banner`);
-    if (!banner) return;
-    const total = this.quizzes[`m${modNum}`]?.questions.length || 0;
-    const pct = total > 0 ? Math.round((modState.quizScore / total) * 100) : 0;
-
-    banner.innerHTML = `
-      <div style="max-width: 700px; margin: 0 auto;">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-          <h3 style="font-size: 18px;">📋 Module ${modNum} — Answer Review</h3>
-          <button class="btn btn-outline" onclick="App.showModuleBanner(${modNum})">← Back</button>
-        </div>
-        <p style="color: var(--text-secondary); margin-bottom: 16px;">
-          Score: <strong style="color: ${pct >= 80 ? 'var(--secondary)' : 'var(--danger)'};">${pct}%</strong>
-          (${modState.quizScore}/${total} correct)
-        </p>
-        ${modState.answers.map((a, i) => `
-          <div style="padding: 14px; margin-bottom: 10px; background: var(--bg-card); border-radius: var(--radius-md); border: 1px solid ${a.wasCorrect ? 'rgba(0,200,83,0.2)' : 'rgba(213,0,0,0.2)'}; border-left: 4px solid ${a.wasCorrect ? 'var(--secondary)' : 'var(--danger)'};">
-            <div style="display: flex; gap: 10px;">
-              <span style="font-weight: 700; color: var(--text-tertiary); flex-shrink: 0;">${i + 1}.</span>
-              <div style="flex: 1;">
-                <p style="font-weight: 600; color: var(--text-primary); font-size: 14px; margin-bottom: 6px;">${a.question}</p>
-                <div style="font-size: 13px; color: var(--text-secondary);">
-                  <p><strong>Your answer:</strong> <span style="color: ${a.wasCorrect ? 'var(--secondary)' : 'var(--danger)'};">${a.options[a.selected]} ${a.wasCorrect ? '✓' : '✗'}</span></p>
-                  ${!a.wasCorrect ? `<p><strong>Correct answer:</strong> <span style="color: var(--secondary);">${a.options[a.correct]}</span></p>` : ''}
-                  <p style="margin-top: 6px; padding: 6px; background: var(--bg-tertiary); border-radius: var(--radius-sm); font-size: 12px;">${a.feedback}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        `).join('')}
-        <div style="text-align:center; margin-top: 16px;">
-          <button class="btn btn-outline" onclick="App.showModuleBanner(${modNum})">← Back to Module Summary</button>
-        </div>
-      </div>
-    `;
-  },
-
-  retakeModuleQuiz(modNum) {
-    const banner = document.getElementById(`m${modNum}-completed-banner`);
-    if (banner) banner.style.display = 'none';
-    const quizContainer = document.getElementById(`quiz-m${modNum}`);
-    if (quizContainer) quizContainer.style.display = 'block';
-    this.setupQuiz(modNum);
-
-    const modState = this.state.modules[modNum];
-    const prevScore = modState.quizScore;
-    const prevAnswers = modState.answers;
-    const prevDate = modState.quizDate;
-
-    this._moduleRetakePrev = { score: prevScore, answers: prevAnswers, date: prevDate };
-  },
-
-  restoreModulePreviousScore(modNum) {
-    const modState = this.state.modules[modNum];
-    if (modState._pendingRestore) {
-      modState.answers = modState._pendingRestore.answers;
-      modState.quizScore = modState._pendingRestore.score;
-      modState.quizDate = modState._pendingRestore.date;
-      delete modState._pendingRestore;
-      this.saveState();
-      this.showToast('Previous score restored', 'info');
-    }
-    this.returnToModule(modNum);
-  },
-
-  dismissModulePending(modNum) {
-    const modState = this.state.modules[modNum];
-    delete modState._pendingRestore;
-    this.saveState();
-    this.returnToModule(modNum);
-  },
-
-  returnToModule(modNum) {
-    const quizContainer = document.getElementById(`quiz-m${modNum}`);
-    if (quizContainer) quizContainer.style.display = 'none';
-    const resultEl = document.getElementById(`quiz-result-m${modNum}`);
-    if (resultEl) resultEl.style.display = 'none';
-    this.showModuleBanner(modNum);
   },
 
   /* ============================================
@@ -1064,7 +918,6 @@ const App = {
     let currentQ = 0;
     let correctCount = 0;
     let answered = false;
-    const answers = [];
 
     const qContainer = document.getElementById(`quiz-${prefix}`);
     if (!qContainer) return;
@@ -1087,54 +940,22 @@ const App = {
       if (resultEl) resultEl.style.display = 'none';
     }
 
-    function saveQuizState() {
-      const modState = App.state.modules[modNum];
-      const prev = App._moduleRetakePrev;
-      modState.answers = answers;
-      modState.quizScore = correctCount;
-      modState.quizDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-      if (prev && correctCount < prev.score) {
-        modState._pendingRestore = { answers: prev.answers, score: prev.score, date: prev.date };
-      }
-      App.saveState();
-      App._moduleRetakePrev = null;
-    }
-
     function showResult(passed, pct) {
       document.querySelectorAll(`#quiz-${prefix} > .quiz-progress, #quiz-${prefix} > .quiz-question, #quiz-${prefix} > .quiz-options, #quiz-${prefix} > .quiz-feedback, #quiz-${prefix} > .quiz-next-btn`).forEach(el => {
         if (el) el.style.display = 'none';
       });
       if (resultEl) {
-        const modState = App.state.modules[modNum];
-        const pending = modState._pendingRestore;
-        const isRetake = !!pending;
-
+        const mod = document.getElementById(`page-module${modNum}`);
         if (passed) {
-          if (isRetake) {
-            resultEl.innerHTML = `
-              <div class="quiz-result-icon">📊</div>
-              <h3>Knowledge Check — Score Updated</h3>
-              <div class="quiz-result-score">${correctCount}/${quiz.questions.length} correct (${pct}%)</div>
-              <div class="quiz-result-message" style="color: var(--warning);">Your new score (${pct}%) is lower than your previous best (${Math.round((pending.score / quiz.questions.length) * 100)}%). Would you like to keep this new score or restore your previous result?</div>
-              <div class="quiz-result-actions">
-                <button class="btn btn-outline" onclick="App.restoreModulePreviousScore(${modNum})">↩️ Restore Previous Score</button>
-                <button class="btn btn-primary" onclick="App.dismissModulePending(${modNum})">✅ Keep New Score</button>
-              </div>
-            `;
-          } else {
-            const alreadyCompleted = App.state.modules[modNum].status === 'completed';
-            const backBtn = `<button class="btn btn-primary" onclick="App.showModuleBanner(${modNum})">← Back to Module</button>`;
-            const completeBtn = `<button class="btn btn-primary" onclick="App.completeModule(${modNum})">✓ Complete Module</button>`;
-            resultEl.innerHTML = `
-              <div class="quiz-result-icon">🎉</div>
-              <h3>Congratulations!</h3>
-              <div class="quiz-result-score">${correctCount}/${quiz.questions.length} correct (${pct}%)</div>
-              <div class="quiz-result-message">${alreadyCompleted ? 'Your score has been updated.' : "Excellent work! You've passed the knowledge check. You're ready to proceed."}</div>
-              <div class="quiz-result-actions">
-                ${alreadyCompleted ? backBtn : completeBtn}
-              </div>
-            `;
-          }
+          resultEl.innerHTML = `
+            <div class="quiz-result-icon">🎉</div>
+            <h3>Congratulations!</h3>
+            <div class="quiz-result-score">${correctCount}/${quiz.questions.length} correct (${pct}%)</div>
+            <div class="quiz-result-message">Excellent work! You've passed the knowledge check. You're ready to proceed.</div>
+            <div class="quiz-result-actions">
+              <button class="btn btn-primary" onclick="App.completeModule(${modNum})">✓ Complete Module</button>
+            </div>
+          `;
         } else {
           resultEl.innerHTML = `
             <div class="quiz-result-icon">📚</div>
@@ -1154,7 +975,6 @@ const App = {
     function loadQuestion() {
       if (currentQ >= quiz.questions.length) {
         const pct = Math.round((correctCount / quiz.questions.length) * 100);
-        saveQuizState();
         showResult(pct >= 80, pct);
         return;
       }
@@ -1179,15 +999,6 @@ const App = {
 
             const idx = parseInt(optBtn.dataset.index);
             const isCorrect = idx === q.correct;
-
-            answers.push({
-              question: q.question,
-              options: q.options,
-              selected: idx,
-              correct: q.correct,
-              wasCorrect: isCorrect,
-              feedback: q.feedback
-            });
 
             optEl.querySelectorAll('.quiz-option').forEach(b => b.disabled = true);
 
@@ -1319,17 +1130,13 @@ const App = {
   },
 
   startAssessment() {
+    document.querySelector('.assessment-info-card').style.display = 'none';
     const quizEl = document.getElementById('assessment-quiz');
-    const infoCard = document.querySelector('.assessment-info-card');
-    if (infoCard) infoCard.style.display = 'none';
-    const dashEl = document.getElementById('assessment-dashboard');
-    if (dashEl) dashEl.style.display = 'none';
     quizEl.style.display = 'block';
 
     let currentQ = 0;
     let correctCount = 0;
     let answered = false;
-    const answers = [];
     const questions = this.assessmentQuestions;
 
     function loadQuestion() {
@@ -1341,34 +1148,10 @@ const App = {
         const pct = Math.round((correctCount / questions.length) * 100);
         const passed = pct >= 80;
 
-        const now = new Date().toLocaleDateString('en-US', {
-          year: 'numeric', month: 'long', day: 'numeric'
-        });
-
-        // Check if this is a retake
-        const isRetake = App.state.assessment.retakeUsed && App.state.assessment.previousResult;
-
-        if (isRetake) {
-          // This is a retake - store pending new result
-          App._pendingNewResult = {
-            score: correctCount,
-            total: questions.length,
-            pct: pct,
-            passed: passed,
-            answers: answers,
-            date: now
-          };
-          App.saveState();
-        } else {
-          // First attempt
-          App.state.assessment.completed = true;
-          App.state.assessment.score = correctCount;
-          App.state.assessment.total = questions.length;
-          App.state.assessment.passed = passed;
-          App.state.assessment.answers = answers;
-          App.state.assessment.date = now;
-          App.saveState();
-        }
+        App.state.assessment.completed = true;
+        App.state.assessment.score = correctCount;
+        App.state.assessment.passed = passed;
+        App.saveState();
 
         document.getElementById('result-score').textContent = correctCount;
         document.getElementById('result-percentage').textContent = `${pct}%`;
@@ -1384,18 +1167,17 @@ const App = {
 
         document.getElementById('result-icon').textContent = passed ? '🏆' : '📚';
 
-        if (passed && !isRetake) {
-          const certDate = now;
+        if (passed) {
+          // Unlock certificate
+          const certDate = new Date().toLocaleDateString('en-US', {
+            year: 'numeric', month: 'long', day: 'numeric'
+          });
           App.state.certificate.date = certDate;
           App.state.certificate.id = 'SLA-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
           App.saveState();
         }
 
         resultEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-        if (isRetake && App._pendingNewResult) {
-          App.showAssessmentComparison(App.state.assessment.previousResult, App._pendingNewResult);
-        }
         return;
       }
 
@@ -1427,15 +1209,6 @@ const App = {
           const idx = parseInt(optBtn.dataset.index);
           const isCorrect = idx === q.correct;
 
-          answers.push({
-            question: q.question,
-            options: q.options,
-            selected: idx,
-            correct: q.correct,
-            wasCorrect: isCorrect,
-            feedback: q.feedback
-          });
-
           optEl.querySelectorAll('.quiz-option').forEach(b => b.disabled = true);
 
           if (isCorrect) {
@@ -1464,209 +1237,15 @@ const App = {
     loadQuestion();
   },
 
-  showAssessmentComparison(prev, next) {
-    const resultEl = document.getElementById('assessment-result');
-    const better = next.pct > prev.pct;
-    const same = next.pct === prev.pct;
-
-    resultEl.querySelector('.result-actions').style.display = 'none';
-
-    resultEl.innerHTML += `
-      <div class="assessment-comparison" style="margin-top: 24px; padding: 20px; background: var(--bg-tertiary); border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-        <h3 style="text-align:center; margin-bottom: 16px;">📊 Assessment Comparison</h3>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-          <div style="padding: 16px; background: var(--bg-card); border-radius: var(--radius-md); border: 1px solid var(--border-color); text-align:center;">
-            <div style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 4px;">Previous Result</div>
-            <div style="font-size: 28px; font-weight: 700; color: var(--text-primary);">${prev.pct}%</div>
-            <div style="font-size: 13px; color: var(--text-secondary);">${prev.score}/${prev.total}</div>
-            <div style="font-size: 11px; color: var(--text-tertiary);">${prev.date}</div>
-          </div>
-          <div style="padding: 16px; background: var(--bg-card); border-radius: var(--radius-md); border: 1px solid ${next.passed ? 'var(--secondary)' : 'var(--danger)'}; text-align:center;">
-            <div style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 4px;">New Result</div>
-            <div style="font-size: 28px; font-weight: 700; color: ${next.passed ? 'var(--secondary)' : 'var(--danger)'};">${next.pct}%</div>
-            <div style="font-size: 13px; color: var(--text-secondary);">${next.score}/${next.total}</div>
-            <div style="font-size: 11px; color: var(--text-tertiary);">${next.date}</div>
-          </div>
-        </div>
-        <div style="text-align:center; margin-top: 16px; font-size: 14px; color: var(--text-secondary);">
-          ${better ? '🎉 Your new score is higher!' : same ? 'Your score is the same.' : 'Your previous score is higher.'}
-        </div>
-        <div style="display: flex; gap: 12px; justify-content: center; margin-top: 16px;">
-          <button class="btn btn-outline" onclick="App.keepPreviousAssessmentResult()">Keep Previous Result</button>
-          <button class="btn btn-primary" onclick="App.replaceWithNewAssessmentResult()">${better ? '✅ Keep New Result' : 'Replace with New Result'}</button>
-        </div>
-      </div>
-    `;
-  },
-
-  keepPreviousAssessmentResult() {
-    const prev = this.state.assessment.previousResult;
-    this.state.assessment.score = prev.score;
-    this.state.assessment.total = prev.total;
-    this.state.assessment.passed = prev.passed;
-    this.state.assessment.answers = prev.answers;
-    this.state.assessment.date = prev.date;
-    this.state.assessment.completed = true;
-    this.state.assessment.retakeUsed = true;
-    this._pendingNewResult = null;
-    this.saveState();
-    this.showToast('Previous result kept', 'info');
-    this.refreshAssessmentView();
-  },
-
-  replaceWithNewAssessmentResult() {
-    const next = this._pendingNewResult;
-    if (!next) return;
-    this.state.assessment.score = next.score;
-    this.state.assessment.total = next.total;
-    this.state.assessment.passed = next.passed;
-    this.state.assessment.answers = next.answers;
-    this.state.assessment.date = next.date;
-    this.state.assessment.completed = true;
-    this.state.assessment.retakeUsed = true;
-    this._pendingNewResult = null;
-    this.saveState();
-    this.showToast('New result saved!', 'success');
-    this.refreshAssessmentView();
-  },
-
-  showAssessmentDashboard() {
-    const assessment = this.state.assessment;
-    if (!assessment.completed) return;
-
-    const pct = Math.round((assessment.score / assessment.total) * 100);
-    const correctCount = assessment.score;
-    const total = assessment.total;
-    const wrongCount = total - correctCount;
-
-    document.getElementById('assessment-info-card').style.display = 'none';
-    document.getElementById('assessment-quiz').style.display = 'none';
-    document.getElementById('assessment-result').style.display = 'none';
-
-    const dashEl = document.getElementById('assessment-dashboard');
-    dashEl.style.display = 'block';
-    dashEl.innerHTML = `
-      <div class="result-container">
-        <div class="result-icon" style="font-size: 48px;">🏆</div>
-        <h2>Assessment Complete</h2>
-        <p style="color: var(--text-secondary); margin-bottom: 20px;">You have successfully completed the Smart Lending Training Course Final Assessment.</p>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; max-width: 600px; margin: 0 auto 24px;">
-          <div class="stat-card" style="text-align:center; padding: 16px;">
-            <div style="font-size: 28px; font-weight: 700; color: ${assessment.passed ? 'var(--secondary)' : 'var(--danger)'};">${pct}%</div>
-            <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 4px;">Final Score</div>
-          </div>
-          <div class="stat-card" style="text-align:center; padding: 16px;">
-            <div style="font-size: 28px; font-weight: 700; color: var(--text-primary);">${assessment.passed ? '✅ Passed' : '❌ Not Passed'}</div>
-            <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 4px;">Status</div>
-          </div>
-          <div class="stat-card" style="text-align:center; padding: 16px;">
-            <div style="font-size: 28px; font-weight: 700; color: var(--text-primary);">${assessment.date}</div>
-            <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 4px;">Completed</div>
-          </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 400px; margin: 0 auto 24px;">
-          <div style="text-align:center; padding: 12px; background: var(--bg-tertiary); border-radius: var(--radius-md);">
-            <div style="font-size: 20px; font-weight: 700; color: var(--text-primary);">${total}</div>
-            <div style="font-size: 12px; color: var(--text-tertiary);">Questions</div>
-          </div>
-          <div style="text-align:center; padding: 12px; background: rgba(0,200,83,0.08); border-radius: var(--radius-md);">
-            <div style="font-size: 20px; font-weight: 700; color: var(--secondary);">${correctCount}</div>
-            <div style="font-size: 12px; color: var(--text-tertiary);">Correct</div>
-          </div>
-          <div style="text-align:center; padding: 12px; background: rgba(213,0,0,0.06); border-radius: var(--radius-md);">
-            <div style="font-size: 20px; font-weight: 700; color: var(--danger);">${wrongCount}</div>
-            <div style="font-size: 12px; color: var(--text-tertiary);">Incorrect</div>
-          </div>
-        </div>
-
-        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-          <button class="btn btn-primary" onclick="App.showAssessmentReview()">📋 View Assessment Review</button>
-          ${!assessment.retakeUsed ? '<button class="btn btn-outline" onclick="App.retakeAssessment()">🔄 Retake Final Assessment</button>' : ''}
-          ${assessment.retakeUsed ? '<p style="width:100%; text-align:center; font-size: 13px; color: var(--text-tertiary); margin-top: 8px;">Retake limit reached. You may only retake the assessment once.</p>' : ''}
-        </div>
-      </div>
-    `;
-  },
-
-  showAssessmentReview() {
-    const assessment = this.state.assessment;
-    if (!assessment.answers || assessment.answers.length === 0) {
-      this.showToast('No assessment data available', 'error');
-      return;
-    }
-
-    const dashEl = document.getElementById('assessment-dashboard');
-    const pct = Math.round((assessment.score / assessment.total) * 100);
-
-    dashEl.innerHTML = `
-      <div style="max-width: 700px; margin: 0 auto;">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-          <h2>📋 Assessment Review</h2>
-          <button class="btn btn-outline" onclick="App.showAssessmentDashboard()">← Back to Summary</button>
-        </div>
-        <p style="color: var(--text-secondary); margin-bottom: 16px;">
-          Score: <strong style="color: ${assessment.passed ? 'var(--secondary)' : 'var(--danger)'};">${pct}%</strong>
-          (${assessment.score}/${assessment.total} correct)
-        </p>
-        ${assessment.answers.map((a, i) => `
-          <div style="padding: 16px; margin-bottom: 12px; background: var(--bg-card); border-radius: var(--radius-md); border: 1px solid ${a.wasCorrect ? 'rgba(0,200,83,0.2)' : 'rgba(213,0,0,0.2)'}; border-left: 4px solid ${a.wasCorrect ? 'var(--secondary)' : 'var(--danger)'};">
-            <div style="display: flex; align-items: flex-start; gap: 12px;">
-              <span style="font-weight: 700; color: var(--text-tertiary); flex-shrink: 0; width: 28px;">${i + 1}.</span>
-              <div style="flex: 1;">
-                <p style="font-weight: 600; color: var(--text-primary); margin-bottom: 8px;">${a.question}</p>
-                <div style="font-size: 13px; color: var(--text-secondary);">
-                  <p style="margin-bottom: 4px;">
-                    <strong>Your answer:</strong>
-                    <span style="color: ${a.wasCorrect ? 'var(--secondary)' : 'var(--danger)'};">${a.options[a.selected]} ${a.wasCorrect ? '✓' : '✗'}</span>
-                  </p>
-                  ${!a.wasCorrect ? `<p style="margin-bottom: 4px;"><strong>Correct answer:</strong> <span style="color: var(--secondary);">${a.options[a.correct]}</span></p>` : ''}
-                  <p style="margin-top: 8px; padding: 8px; background: var(--bg-tertiary); border-radius: var(--radius-sm); font-size: 12px;">${a.feedback}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        `).join('')}
-        <div style="text-align:center; margin-top: 20px;">
-          <button class="btn btn-outline" onclick="App.showAssessmentDashboard()">← Back to Summary</button>
-        </div>
-      </div>
-    `;
-    dashEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  },
-
-  refreshAssessmentView() {
-    document.querySelector('#assessment-result .assessment-comparison')?.remove();
-    this.showAssessmentDashboard();
-  },
-
   retakeAssessment() {
-    if (this.state.assessment.retakeUsed) {
-      this.showToast('Retake limit reached. You may only retake once.', 'error');
-      return;
-    }
-
-    // Save current result as previous before retaking
-    this.state.assessment.previousResult = {
-      score: this.state.assessment.score,
-      total: this.state.assessment.total,
-      pct: Math.round((this.state.assessment.score / this.state.assessment.total) * 100),
-      passed: this.state.assessment.passed,
-      answers: this.state.assessment.answers,
-      date: this.state.assessment.date
-    };
-    this.state.assessment.retakeUsed = true;
     this.state.assessment.completed = false;
+    this.state.assessment.score = 0;
+    this.state.assessment.passed = false;
     this.saveState();
 
     document.getElementById('assessment-result').style.display = 'none';
-    document.querySelector('.assessment-info-card').style.display = 'none';
-    const dashEl = document.getElementById('assessment-dashboard');
-    if (dashEl) dashEl.style.display = 'none';
-
-    // Start the retake
-    this.startAssessment();
+    document.querySelector('.assessment-info-card').style.display = 'block';
+    this.showToast('Assessment reset. Good luck!', 'info');
   },
 
   /* ============================================
