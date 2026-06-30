@@ -754,17 +754,15 @@ const App = {
 
         setTimeout(() => {
           document.getElementById('m1-discussion').style.display = 'block';
-          document.getElementById('m1-discussion').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 800);
+        }, 600);
 
         setTimeout(() => {
           document.getElementById('m1-comparison').style.display = 'block';
-        }, 1500);
+        }, 1200);
 
         setTimeout(() => {
           document.getElementById('m1-golden').style.display = 'block';
-          document.getElementById('m1-golden').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 2200);
+        }, 1800);
 
         if (this.state.modules[1].status === 'not_started') {
           this.state.modules[1].status = 'in_progress';
@@ -790,18 +788,16 @@ const App = {
 
         setTimeout(() => {
           document.getElementById('m2-farming').style.display = 'block';
-          document.getElementById('m2-farming').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 800);
+        }, 700);
 
         setTimeout(() => {
           document.getElementById('m2-pipeline').style.display = 'block';
-          document.getElementById('m2-pipeline').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 1500);
+        }, 1300);
 
         if (document.getElementById('m2-knowledge')) {
           setTimeout(() => {
             document.getElementById('m2-knowledge').style.display = 'block';
-          }, 2200);
+          }, 1900);
         }
 
         if (this.state.modules[2].status === 'in_progress' || this.state.modules[2].status === 'locked') {
@@ -826,12 +822,10 @@ const App = {
 
         setTimeout(() => {
           document.getElementById('m4-timeline').style.display = 'block';
-          document.getElementById('m4-timeline').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 600);
 
         setTimeout(() => {
           document.getElementById('m4-traffic').style.display = 'block';
-          document.getElementById('m4-traffic').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 1200);
 
         if (this.state.modules[4].status === 'not_started' || this.state.modules[4].status === 'locked') {
